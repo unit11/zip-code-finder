@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" media="screen" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css">
+
+    <title>Minimum Bootstrap HTML Skeleton</title>
+
+    <!--  -->
+
+    <style>
+        .jumbotron {
+            background-color: #337ab7;
+        }
+
+        .jumbotron {
+            color: white;
+        }
+
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="header clearfix">
+            <nav>
+
+            </nav>
+            <!--            <h3 class="text-muted">Zip Finder</h3>-->
+        </div>
+
+        <div class="jumbotron">
+            <h1>Zip Finder</h1>
+            <form id="myForm">
+                <div class="form-group">
+                    <label>Enter Your Zip Code Here</label>
+                    <input type="text" class="form-control zip" id="siteName" placeholder="Enter Zip Code Here">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+
+        <div class="row marketing">
+            <div class="col-lg-12">
+                <div id="bookmarksResults"></div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <!-- /container -->
+
+
+    <div class="container">
+        <div id="output">
+
+        </div>
+        <footer class="footer">
+            <p>&copy; 2016 ZipCode, Inc.</p>
+        </footer>
+    </div>
+
+    <div class="container">
+
+<!--
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Location</h3>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>City:</dt>
+                    <dd>${place['place name']}</dd>
+                    <dt>State:</dt>
+                    <dd>${place['state']}</dd>
+                    <dt>Longitude:</dt>
+                    <dd>${place['longitude']}</dd>
+                    <dt>Latitude:</dt>
+                    <dd>34</dd>
+                </dl>
+
+            </div>
+        </div>
+-->
+
+
+
+
+
+
+
+    </div>
+
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script>
+        document.getElementById('myForm').addEventListener('submit', getLocationInfo);;
+        
+        
+        
+        
+        
+        
+
+        function getLocationInfo(e) {
+            const zip = document.querySelector('.zip').value;
+            fetch(`http://api.zippopotam.us/us/${zip}`)
+                .then(response => {
+
+                    if (response.status != 200) {
+                        document.querySelector('#output').innerHTML =
+                            '<div class="alert alert-danger " role="alert"> <strong>Please Use A Valid Zipcode</strong>  </div>';
+                        throw Error(response.statusText);
+                    } else {
+                        return response.json();
+                    }
+
+                })
+                .then(data => {
+                    let output = '';
+                console.log(data)
+                    data.places.forEach(place => {
+                        console.log(place)
+                        output += `
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Location</h3>
+                                    </div>
+                                    <div class="panel-body">
+                                        <dl class="dl-horizontal">
+                                            <dt>City:</dt>
+                                            <dd>${place['place name']}</dd>
+                                            <dt>State:</dt>
+                                            <dd>${place['state']}</dd>
+                                            <dt>Longitude:</dt>
+                                            <dd>${place['longitude']}</dd>
+                                            <dt>Latitude:</dt>
+                                            <dd>${place['latitude']}</dd>
+                                        </dl>
+
+                                    </div>
+                                </div>
+                        `
+
+
+
+                    });
+                    document.querySelector('#output').innerHTML = output;
+                })
+                .catch(err => console.log(err));
+
+            e.preventDefault();
+        }
+        
+        
+        
+        
+        
+
+    </script>
+
+</body>
+
+</html>
